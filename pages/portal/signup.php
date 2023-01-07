@@ -123,7 +123,6 @@ if (isset($_POST['signup'])) {
     $nama = $_POST['nama'];
     $no_telp = $_POST['no_telp'];
     $email = $_POST['email'];
-    $password = $_POST['password'];
     $password = md5($_POST['password']);
     // save pendaftar
     $tbl = "pendaftar";

@@ -93,17 +93,41 @@ body {
         <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
         <div class="form-floating">
-            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-            <label for="floatingInput">Email address</label>
+            <input type="email" class="form-control" name="email" id="email" placeholder="name@example.com">
+            <label for="email">Email address</label>
         </div>
         <div class="form-floating mb-3">
-            <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-            <label for="floatingPassword">Password</label>
+            <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+            <label for="password">Password</label>
         </div>
-        <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+        <button class="w-100 btn btn-lg btn-primary" type="submit" name="signin">Sign in</button>
         <div class="mt-3 text-right">
             Tidak Punya Akun? <a href="?menu=sign-up">Silahkan Daftar</a>
         </div>
         <p class="mt-5 mb-3 text-muted text-center">&copy; 2022</p>
     </form>
 </main>
+
+<?php
+if (isset($_POST['signin'])) {
+    $email = $_POST['email'];
+    $password = md5($_POST['password']);
+    // cek data user
+    $col = "*";
+    $tbl = "users";
+    $val = "WHERE email='" . $email . "' AND password='" . $password . "'";
+    $ambil_users = querySelect($col, $tbl, $val);
+    $count_user = mysqli_fetch_row($ambil_users);
+    $ambil_users = querySelect($col, $tbl, $val);
+    $data = mysqli_fetch_array($ambil_users);
+    if($count_user > 0){
+        // ada user
+        $_SESSION['username'] = $email;
+        $_SESSION['id_pendaftar'] = $data['id_pendaftar'];
+        echo '<script>alert("Berhasil Sign In!"); document.location="?menu=dashboard";</script>';
+    }else{
+        // tidak ada user
+        echo '<script>alert("Gagal Sign In!"); document.location="?menu=sign-in";</script>';
+    }
+}
+?>
